@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataSplitter by Syntax Labs — Split Huge CSV Files Locally</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+
+    <header class="site-nav">
+        <div class="site-nav-inner">
+            <a href="index.html" class="site-nav-logo">⚗️ Syntax Labs</a>
+            <nav class="site-nav-links" aria-label="Page sections">
+                <a href="#compare">How it Compares</a>
+                <span class="site-nav-sep" aria-hidden="true">|</span>
+                <a href="#guides">Rescue Guides</a>
+                <span class="site-nav-sep" aria-hidden="true">|</span>
+                <a href="#faq">FAQ</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <header class="app-header">
+            <div class="brand">Syntax Labs / <span class="product-name">DataSplitter</span></div>
+            <h1>Excel crashed again?</h1>
+            <p class="subtitle">Fix your huge CSV in 5 seconds. 100% Private & Local-First.</p>
+            <div class="inline-steps" aria-label="How it works">
+                <span>Drop CSV</span>
+                <span class="step-arrow" aria-hidden="true">➔</span>
+                <span>Set Row Limit</span>
+                <span class="step-arrow" aria-hidden="true">➔</span>
+                <span>Download ZIP</span>
+            </div>
+        </header>
+
+        <main class="main-card">
+            <div id="drop-zone" class="drop-zone">
+                <div class="drop-zone-content">
+                    <svg class="drop-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 5v14M5 12h14" stroke-linecap="round"/>
+                    </svg>
+                    <p class="drop-text">Drag & drop your heavy CSV file here or <span class="browse-btn">browse</span></p>
+                    <p class="drop-subtext">Files never leave your computer. Processed entirely in browser.</p>
+                </div>
+                <input type="file" id="file-input" accept=".csv" style="display: none;">
+            </div>
+
+            <div class="controls-panel">
+                <div class="setting-group">
+                    <label for="split-limit">Split every:</label>
+                    <select id="split-limit">
+                        <option value="20000">20,000 rows</option>
+                        <option value="50000" selected>50,000 rows</option>
+                        <option value="100000">100,000 rows</option>
+                    </select>
+                </div>
+
+                <div id="status-container" class="status-container hidden">
+                    <div id="status-message">Ready to split...</div>
+                    <div class="progress-bar-bg">
+                        <div id="progress-bar" class="progress-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="performance-proof">
+                ⚡️ In-Browser Engine Speed: 120MB File ≈ 1.4s | 350MB File ≈ 4.8s | 700MB File ≈ 11s. Zero server lag.
+            </p>
+        </main>
+
+        <section class="utility-section utility-section--full animate-on-scroll">
+            <h2>Built For</h2>
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <svg class="use-case-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>CRM Exports</span>
+                </div>
+                <div class="use-case-card">
+                    <svg class="use-case-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span>Shopify Orders</span>
+                </div>
+                <div class="use-case-card">
+                    <svg class="use-case-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span>Google Ads Reports</span>
+                </div>
+                <div class="use-case-card">
+                    <svg class="use-case-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                        <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                    </svg>
+                    <span>Analytics Datasets</span>
+                </div>
+                <div class="use-case-card">
+                    <svg class="use-case-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                    <span>Large Lead Lists</span>
+                </div>
+                <div class="use-case-card">
+                    <svg class="use-case-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                        <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"></path>
+                    </svg>
+                    <span>ERP Data Dumps</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="compare" class="utility-section utility-section--full animate-on-scroll">
+            <h2>How it Compares</h2>
+            <div class="table-container">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th class="highlight">DataSplitter</th>
+                            <th>Microsoft Excel</th>
+                            <th>Cloud Splitters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>File Size Limit</strong></td>
+                            <td class="highlight-cell">500MB+ (No limit)</td>
+                            <td>1,048,576 rows max</td>
+                            <td>Crashes often</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Upload Required</strong></td>
+                            <td class="highlight-cell">No (100% Local)</td>
+                            <td>No</td>
+                            <td>Yes (Privacy risk)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Processing Speed</strong></td>
+                            <td class="highlight-cell">Instant (Streams)</td>
+                            <td>Freezes RAM</td>
+                            <td>Queue &amp; Network lag</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Header Duplication</strong></td>
+                            <td class="highlight-cell">Automatic</td>
+                            <td>Manual copy-paste</td>
+                            <td>Missing often</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="guides" class="utility-section utility-section--full animate-on-scroll">
+            <h2>CSV Rescue Guides</h2>
+            <div class="guides-grid">
+                <article class="guide-card animate-on-scroll">
+                    <span class="guide-meta">Problem ➔ Solution</span>
+                    <h3>Excel freezes when opening large CSV</h3>
+                    <p>Learn why Excel chokes on heavy files and why splitting them into 50k row chunks is the ultimate memory fix.</p>
+                    <a href="guides/excel-freezes-large-csv.html" class="guide-link">Read Guide ➔</a>
+                </article>
+                <article class="guide-card animate-on-scroll">
+                    <span class="guide-meta">Limits Bypass</span>
+                    <h3>Google Sheets row limit exceeded</h3>
+                    <p>How to bypass the strict 10-million cells limit in Google Sheets by dividing your datasets before importing.</p>
+                    <a href="guides/google-sheets-row-limit-exceeded.html" class="guide-link">Read Guide ➔</a>
+                </article>
+                <article class="guide-card animate-on-scroll">
+                    <span class="guide-meta">E-commerce Fix</span>
+                    <h3>How to split Shopify exports for local editing</h3>
+                    <p>A step-by-step workflow for e-commerce managers to manage giant inventory CSVs without losing data structure.</p>
+                    <a href="guides/split-shopify-csv-export.html" class="guide-link">Read Guide ➔</a>
+                </article>
+            </div>
+        </section>
+
+        <section id="faq" class="utility-section utility-section--full animate-on-scroll">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <details class="faq-item">
+                    <summary>Is DataSplitter free to use?</summary>
+                    <p>Yes, it is a 100% free utility developed by Syntax Labs to help professionals handle heavy datasets instantly.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Where does my data go?</summary>
+                    <p>Nowhere. DataSplitter operates entirely inside your browser sandbox using modern HTML5 Streams. Your files are never uploaded to any server.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Will it corrupt special characters or encodings?</summary>
+                    <p>No. Our streaming engine via PapaParse preserves strict binary integrity, keeping your original UTF-8/UTF-16 encodings and quoted commas completely intact.</p>
+                </details>
+            </div>
+        </section>
+
+        <section class="ecosystem-section">
+            <div class="ecosystem-title">More Tech from Syntax Labs</div>
+            <div class="ecosystem-grid">
+                <a href="https://docstamp.syntaxlabsapp.com/" target="_blank" rel="noopener noreferrer" class="eco-card animate-on-scroll">
+                    <h4>📄 DocStamp</h4>
+                    <p>Sign PDFs locally in 10 seconds.</p>
+                </a>
+                <a href="https://tablemask.com" target="_blank" rel="noopener noreferrer" class="eco-card animate-on-scroll">
+                    <h4>🛡️ TableMask</h4>
+                    <p>Mask sensitive PII data before AI prompts.</p>
+                </a>
+                <a href="https://tablexport.com" target="_blank" rel="noopener noreferrer" class="eco-card animate-on-scroll">
+                    <h4>📂 TableXport</h4>
+                    <p>Export Markdown tables to Google Sheets.</p>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <p class="site-footer-copy">© 2026 DataSplitter by Syntax Labs. Built for speed. Contact: <a href="mailto:hello@syntaxlabsapp.com">hello@syntaxlabsapp.com</a></p>
+            <nav class="site-footer-links" aria-label="Legal">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

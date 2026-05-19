@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Row Limit Exceeded: How to Import Heavy CSV Datasets — DataSplitter</title>
+    <meta name="description" content="Google Sheets row limit exceeded? Learn the 10M cell cap, why wide CSVs fail at ~200k rows, and how to split CSV before importing to Google Sheets locally.">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+    <div class="app-container guide-page">
+        <a href="../index.html" class="guide-back-link">← Back to DataSplitter</a>
+
+        <article class="guide-article">
+            <span class="guide-meta">CSV Rescue Guide · Google Sheets</span>
+            <h1>Google Sheets Row Limit Exceeded: How to Import Heavy CSV Datasets</h1>
+            <p class="guide-lead">
+                Hit <strong>google sheets row limit exceeded</strong> on import? The blocker is usually <em>cells</em>, not rows. Here’s the math, why <strong>open heavy csv in google sheets</strong> fails, and how to <strong>split csv before importing google sheets</strong> without cloud uploads.
+            </p>
+
+            <h2>Google Sheets limits (the real numbers)</h2>
+            <p>
+                A spreadsheet workbook is capped at <code class="mono">10,000,000 cells</code> total — shared across every tab. That is the hard <strong>google sheets row limit</strong> expressed as area, not row count.
+            </p>
+            <p><strong>Quick math:</strong></p>
+            <ul>
+                <li><code class="mono">50 columns</code> → max ~<code class="mono">200,000 rows</code> per workbook (<code class="mono">50 × 200,000 = 10M</code>).</li>
+                <li><code class="mono">100 columns</code> → max ~<code class="mono">100,000 rows</code>.</li>
+                <li><code class="mono">26 columns</code> (A–Z) → max ~<code class="mono">384,615 rows</code>.</li>
+            </ul>
+            <p>
+                Import a CSV bigger than that and Google returns <strong>“File is too large”</strong> or the sheet stalls mid-load. Wide exports (analytics, CRM, ads) hit the wall early.
+            </p>
+
+            <div class="guide-callout">
+                <p><strong>Rows ≠ cells.</strong> A 500k-row × 40-column export needs <code class="mono">20M cells</code> — double the workbook cap. You must <strong>split csv before importing google sheets</strong>, not compress harder.</p>
+            </div>
+
+            <h2>The fix: pre-split locally, import per tab</h2>
+            <p>
+                Don’t upload a 400MB monster to Drive and pray. <strong>Pre-splitting</strong> means:
+            </p>
+            <ul>
+                <li>One logical dataset → multiple CSV parts under the cell budget.</li>
+                <li>Each part gets the <strong>same header row</strong> (required for <code class="mono">QUERY</code> / <code class="mono">XLOOKUP</code> later).</li>
+                <li>Each part lands on its <strong>own sheet tab</strong> — stays under <code class="mono">10M cells</code> per workbook if you plan tabs correctly.</li>
+            </ul>
+
+            <h2>Workflow: 2-second local split → Google Sheets</h2>
+            <ol>
+                <li><strong>Split in browser</strong> with <a href="../index.html" style="color: var(--accent);">DataSplitter</a> — no server upload, no queue.</li>
+                <li>Choose <code class="mono">20,000</code> or <code class="mono">50,000</code> rows per file (adjust for column count).</li>
+                <li>Download ZIP → unzip → you get <code class="mono">export_part001.csv</code>, <code class="mono">part002.csv</code>, …</li>
+                <li>In Google Sheets: <strong>File → Import → Upload</strong> for each part.</li>
+                <li>Select <strong>“Insert new sheet(s)”</strong> so each chunk gets a tab (<code class="mono">part001</code>, <code class="mono">part002</code>, …).</li>
+                <li>Link tabs with formulas:
+                    <ul>
+                        <li><code class="mono">=QUERY(part001!A:Z, "SELECT * WHERE Col5 &gt; 100")</code> — filter across one chunk.</li>
+                        <li><code class="mono">=XLOOKUP(A2, part002!A:A, part002!C:C)</code> — join keys across tabs.</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h2>Chunk size cheat sheet (stay under 10M cells)</h2>
+            <ul>
+                <li><strong>~30 columns</strong> → up to <code class="mono">300k rows</code> theoretical max; use <code class="mono">50k</code> splits for import speed.</li>
+                <li><strong>~50 columns</strong> → cap ~<code class="mono">200k rows</code>; split at <code class="mono">50k</code> = 4 safe files.</li>
+                <li><strong>~100+ columns</strong> → split at <code class="mono">20k</code> rows to keep imports snappy.</li>
+            </ul>
+
+            <h2>Why local split beats cloud converters</h2>
+            <ul>
+                <li><strong>Privacy</strong> — revenue, emails, and ad IDs never leave your machine.</li>
+                <li><strong>Speed</strong> — streaming parse; no upload/download round trip.</li>
+                <li><strong>Encoding</strong> — UTF-8 and quoted fields preserved (critical for international text).</li>
+            </ul>
+
+            <p>
+                <strong>Summary:</strong> When you <strong>open heavy csv in google sheets</strong> and it fails, you’re over the <code class="mono">10M cells</code> budget. Split first, import per tab, connect with <code class="mono">QUERY</code> or <code class="mono">XLOOKUP</code>. That’s the stable fix for <strong>google sheets row limit exceeded</strong>.
+            </p>
+
+            <a href="../index.html" class="guide-cta">Split CSV for Google Sheets — free</a>
+        </article>
+
+        <section class="ecosystem-section">
+            <div class="ecosystem-title">More Tech from Syntax Labs</div>
+            <div class="ecosystem-grid">
+                <a href="https://docstamp.syntaxlabsapp.com/" target="_blank" rel="noopener noreferrer" class="eco-card">
+                    <h4>📄 DocStamp</h4>
+                    <p>Sign PDFs locally in 10 seconds.</p>
+                </a>
+                <a href="https://tablemask.com" target="_blank" rel="noopener noreferrer" class="eco-card">
+                    <h4>🛡️ TableMask</h4>
+                    <p>Mask sensitive PII data before AI prompts.</p>
+                </a>
+                <a href="https://tablexport.com" target="_blank" rel="noopener noreferrer" class="eco-card">
+                    <h4>📂 TableXport</h4>
+                    <p>Export Markdown tables to Google Sheets.</p>
+                </a>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

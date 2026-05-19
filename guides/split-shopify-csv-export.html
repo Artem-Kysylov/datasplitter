@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Split Giant Shopify Export CSV Files for Safe Editing — DataSplitter</title>
+    <meta name="description" content="Split Shopify CSV export files without breaking Handle, Title, SKU headers. Fix large Shopify inventory CSV files locally with streaming split and ZIP download.">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+    <div class="app-container guide-page">
+        <a href="../index.html" class="guide-back-link">← Back to DataSplitter</a>
+
+        <article class="guide-article">
+            <span class="guide-meta">CSV Rescue Guide · E-commerce</span>
+            <h1>How to Split Giant Shopify Export CSV Files for Safe Editing</h1>
+            <p class="guide-lead">
+                A full catalog or order export can hit <strong>hundreds of megabytes</strong>. Excel and Sheets choke; manual cuts break <strong>quoted commas</strong>. Here’s how to <strong>split shopify csv export</strong> files without wrecking import-ready structure.
+            </p>
+
+            <h2>The e-commerce CSV problem</h2>
+            <p>
+                Shopify, HubSpot, and similar platforms export flat CSVs that grow fast:
+            </p>
+            <ul>
+                <li><strong>Products</strong> — variants, metafields, images → wide rows, huge files.</li>
+                <li><strong>Orders</strong> — line items, discounts, addresses → nested data flattened into columns.</li>
+                <li><strong>Customers</strong> — tags, notes, marketing flags → millions of rows after years of sales.</li>
+            </ul>
+            <p>
+                Open a <strong>large shopify inventory csv</strong> in Excel and you get freezes. Open in a text editor and you risk breaking <strong>quoted fields</strong> like:
+            </p>
+            <p><code class="mono">"Organic Tee, Limited","Size: M, Color: Blue",SKU-9912</code></p>
+            <p>
+                One wrong split on a comma inside quotes → shifted columns → <strong>failed re-import</strong>. That’s the core <strong>divide product csv shopify</strong> risk.
+            </p>
+
+            <h2>Header persistence (non-negotiable for Shopify)</h2>
+            <p>
+                Shopify’s import engine expects the <strong>exact header row</strong> on every file. Typical required columns include:
+            </p>
+            <ul>
+                <li><code class="mono">Handle</code> — product URL key; duplicates break linking.</li>
+                <li><code class="mono">Title</code> — display name.</li>
+                <li><code class="mono">SKU</code> — inventory identity (variants depend on it).</li>
+                <li>Plus variant, price, inventory, image columns — order must match the template.</li>
+            </ul>
+            <p>
+                <strong>If any chunk is missing row 1 headers, the import fails silently or rejects rows.</strong> Manual splitting often drops headers on part 2+. Automated header duplication on every chunk is mandatory.
+            </p>
+
+            <div class="guide-callout">
+                <p><strong>Shopify rule:</strong> Treat each split file as a standalone import-ready CSV. Row 1 = headers. Row 2+ = data only. No blank first lines.</p>
+            </div>
+
+            <h2>The fix: stream-split with DataSplitter</h2>
+            <p>
+                DataSplitter reads your export with <strong>PapaParse streaming</strong> — never loads the full file into RAM. It:
+            </p>
+            <ul>
+                <li><strong>Preserves quoting</strong> — commas inside <code class="mono">"..."</code> stay inside one cell.</li>
+                <li><strong>Keeps encoding</strong> — UTF-8 (and special characters in titles/descriptions) unchanged.</li>
+                <li><strong>Duplicates headers</strong> at the top of every <code class="mono">part00X.csv</code>.</li>
+                <li><strong>Packs a ZIP</strong> — one download, ready for edit or re-import.</li>
+            </ul>
+
+            <h2>Step-by-step workflow</h2>
+            <ol>
+                <li>Export from Shopify Admin → <strong>Products / Orders / Customers</strong> → CSV.</li>
+                <li>Open <a href="../index.html" style="color: var(--accent);">DataSplitter</a> → drop the <code class="mono">.csv</code> file.</li>
+                <li>Set chunk size:
+                    <ul>
+                        <li><code class="mono">20,000 rows</code> — wide product sheets (40+ columns).</li>
+                        <li><code class="mono">50,000 rows</code> — standard catalogs.</li>
+                    </ul>
+                </li>
+                <li>Download ZIP → edit each part in Excel / Sheets / OpenRefine.</li>
+                <li>Re-import to Shopify <strong>one part at a time</strong> — verify row counts and spot-check <code class="mono">Handle</code> + <code class="mono">SKU</code> on part 1 before bulk-running the rest.</li>
+            </ol>
+
+            <h2>Editing tips (avoid re-import surprises)</h2>
+            <ul>
+                <li><strong>Don’t reorder columns</strong> — Shopify maps by header name, not position, but custom apps may differ.</li>
+                <li><strong>Don’t strip leading zeros</strong> from SKUs in Excel (format column as Text first).</li>
+                <li><strong>Keep UTF-8</strong> when saving — avoid “CSV (Macintosh)” encodings.</li>
+                <li><strong>Same delimiter</strong> — comma-separated; DataSplitter outputs standard CSV.</li>
+            </ul>
+
+            <p>
+                <strong>Bottom line:</strong> To <strong>split shopify csv export</strong> safely, use streaming split + header on every part + ZIP output. That’s how you fix a <strong>large shopify inventory csv</strong> without corrupting structure — and how you <strong>divide product csv shopify</strong> files for local edits that actually import back.
+            </p>
+
+            <a href="../index.html" class="guide-cta">Split Shopify export — free &amp; local</a>
+        </article>
+
+        <section class="ecosystem-section">
+            <div class="ecosystem-title">More Tech from Syntax Labs</div>
+            <div class="ecosystem-grid">
+                <a href="https://docstamp.syntaxlabsapp.com/" target="_blank" rel="noopener noreferrer" class="eco-card">
+                    <h4>📄 DocStamp</h4>
+                    <p>Sign PDFs locally in 10 seconds.</p>
+                </a>
+                <a href="https://tablemask.com" target="_blank" rel="noopener noreferrer" class="eco-card">
+                    <h4>🛡️ TableMask</h4>
+                    <p>Mask sensitive PII data before AI prompts.</p>
+                </a>
+                <a href="https://tablexport.com" target="_blank" rel="noopener noreferrer" class="eco-card">
+                    <h4>📂 TableXport</h4>
+                    <p>Export Markdown tables to Google Sheets.</p>
+                </a>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

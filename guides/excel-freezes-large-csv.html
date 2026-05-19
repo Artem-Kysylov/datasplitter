@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Freezes When Opening Large CSV? How to Split it Instantly — DataSplitter</title>
+    <meta name="description" content="Excel freezes on large CSV files? Learn why Excel hits the 1,048,576 row limit, why 100–200MB files kill RAM, and how to split CSV for Excel instantly with DataSplitter.">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+    <div class="app-container guide-page">
+        <a href="../index.html" class="guide-back-link">← Back to DataSplitter</a>
+
+        <article class="guide-article">
+            <span class="guide-meta">CSV Rescue Guide · Excel</span>
+            <h1>Excel Freezes When Opening Large CSV? How to Split it Instantly</h1>
+            <p class="guide-lead">
+                If <strong>Excel freezes on a large CSV</strong>, the file is almost always too heavy for Excel’s in-memory model — not “corrupt.” Here’s the hard limit, why RAM dies first, and how to <strong>split a CSV for Excel</strong> in seconds without uploading data anywhere.
+            </p>
+
+            <h2>Why Excel dies on heavy CSV files</h2>
+            <p>
+                Excel has a hard ceiling of <code class="mono">1,048,576 rows</code> per worksheet. That is the absolute <strong>CSV too large for Excel limit</strong> — you cannot paste or open more rows than that, period.
+            </p>
+            <p>
+                But the UI usually freezes <em>long before</em> you hit the row cap. A <strong>100–200 MB CSV</strong> often locks Excel because it tries to:
+            </p>
+            <ul>
+                <li><strong>Load the entire file into RAM</strong> as a live grid (not a stream).</li>
+                <li><strong>Auto-detect column types</strong> and rebuild indexes on millions of cells.</li>
+                <li><strong>Hold formatting metadata</strong> for every cell it touches during import.</li>
+            </ul>
+            <p>
+                Result: fan noise, “Not Responding,” or a crash — even when row count is under <code class="mono">1,048,576</code>. This is a memory problem, not a file-size myth.
+            </p>
+
+            <div class="guide-callout">
+                <p><strong>Rule of thumb:</strong> If opening the CSV makes Excel hang for 30+ seconds, stop forcing it. <strong>Fix the heavy CSV file</strong> by splitting first, then open each chunk.</p>
+            </div>
+
+            <h2>The fix: chunk the file before Excel touches it</h2>
+            <p>
+                <strong>How to split CSV for Excel</strong> without breaking data: cut the file into parts of <code class="mono">20,000</code> or <code class="mono">50,000</code> rows. Each part opens fast because Excel only allocates RAM for one slice.
+            </p>
+            <ul>
+                <li><strong>20,000 rows</strong> — safest for wide sheets (50+ columns) or older machines.</li>
+                <li><strong>50,000 rows</strong> — sweet spot for most CRM / ads exports on modern hardware.</li>
+                <li><strong>100,000 rows</strong> — only if columns are few and you still see smooth opens.</li>
+            </ul>
+            <p>
+                Every chunk must include the <strong>original header row</strong> as row 1. Without headers, VLOOKUP, filters, and pivot tables break. DataSplitter duplicates headers automatically — no manual copy-paste.
+            </p>
+
+            <h2>Step-by-step: split with DataSplitter (local, ~5 seconds)</h2>
+            <ol>
+                <li>Open <a href="../index.html" style="color: var(--accent);">DataSplitter</a> in your browser.</li>
+                <li><strong>Drop your .csv</strong> onto the zone (or browse). File stays on your machine — zero upload.</li>
+                <li><strong>Select chunk size</strong> — <code class="mono">20,000</code> or <code class="mono">50,000</code> rows in the dropdown.</li>
+                <li>Wait for the ZIP download. Inside: <code class="mono">filename_part001.csv</code>, <code class="mono">part002.csv</code>, etc.</li>
+                <li><strong>Unzip</strong> and open <em>one part at a time</em> in Excel. Save as <code class="mono">.xlsx</code> only if you need Excel features — keep master data as CSV.</li>
+            </ol>
+
+            <h2>Encoding &amp; headers (what usually breaks)</h2>
+            <ul>
+                <li><strong>UTF-8</strong> — accents, emoji, and non-Latin text stay intact when you use a stream parser (PapaParse) instead of Excel’s importer guessing wrong.</li>
+                <li><strong>Quoted commas</strong> — fields like <code class="mono">"123 Main St, Apt 4"</code> must stay inside quotes. Bad splits break columns; streaming parse preserves RFC-style quoting.</li>
+                <li><strong>Header row</strong> — duplicated on every part so each file is a valid standalone import.</li>
+            </ul>
+
+            <p>
+                <strong>Bottom line:</strong> Don’t fight a <strong>csv too large for excel limit</strong> in one window. Pre-split locally, open chunks, merge insights with Power Query or pivots if needed. That’s the reliable <strong>excel freezes large csv</strong> fix.
+            </p>
+
+            <a href="../index.html" class="guide-cta">Split your CSV now — free &amp; local</a>
+        </article>
+
+        <section class="ecosystem-section">
+            <div class="ecosystem-title">More Tech from Syntax Labs</div>
+            <div class="ecosystem-grid">
+                <a href="https://docstamp.syntaxlabsapp.com/" target="_blank" rel="noopener noreferrer" class="eco-card">
+                    <h4>📄 DocStamp</h4>
+                    <p>Sign PDFs locally in 10 seconds.</p>
+                </a>
+                <a href="https://tablemask.com" target="_blank" rel="noopener noreferrer" class="eco-card">
+                    <h4>🛡️ TableMask</h4>
+                    <p>Mask sensitive PII data before AI prompts.</p>
+                </a>
+                <a href="https://tablexport.com" target="_blank" rel="noopener noreferrer" class="eco-card">
+                    <h4>📂 TableXport</h4>
+                    <p>Export Markdown tables to Google Sheets.</p>
+                </a>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
