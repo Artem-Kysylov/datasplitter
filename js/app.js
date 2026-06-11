@@ -289,6 +289,11 @@ const startCSVProcessing = (file) => {
                     `Done! ${totalRows.toLocaleString()} rows → ${fileLabel}. Download started.`,
                     'success',
                 );
+                
+                // Trigger cross-sell modal after successful completion
+                if (crossSellModal?.showCrossSellModal) {
+                    crossSellModal.showCrossSellModal();
+                }
             } catch (err) {
                 resetDropZoneUI();
                 updateUIStatus(err.message || 'Failed to create ZIP archive.', 'error');
@@ -324,3 +329,55 @@ const initScrollAnimations = () => {
 };
 
 document.addEventListener('DOMContentLoaded', initScrollAnimations);
+
+// Cross-sell Modal Logic
+const CROSS_SELL_STORAGE_KEY = 'syntaxlabs_cross_sell_dismissed';
+const CROSS_SELL_SHOW_DELAY = 2500; // 2.5 seconds after successful completion
+
+const initCrossSellModal = () => {
+    const modal = document.getElementById('syntaxlabs-cross-sell-modal');
+    const closeButton = modal?.querySelector('.cross-sell-modal__close');
+    const backdrop = modal?.querySelector('.cross-sell-modal__backdrop');
+
+    if (!modal || !closeButton || !backdrop) return;
+
+    const closeModal = () => {
+        modal.classList.remove('cross-sell-modal--visible');
+        modal.classList.add('cross-sell-modal--hidden');
+        localStorage.setItem(CROSS_SELL_STORAGE_KEY, 'true');
+    };
+
+    // Close button handler
+    closeButton.addEventListener('click', closeModal);
+
+    // Backdrop click handler
+    backdrop.addEventListener('click', closeModal);
+
+    // ESC key handler
+    const handleEscKey = (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('cross-sell-modal--visible')) {
+            closeModal();
+            document.removeEventListener('keydown', handleEscKey);
+        }
+    };
+
+    // Show modal function
+    const showCrossSellModal = () => {
+        // Check if user already dismissed the modal
+        if (localStorage.getItem(CROSS_SELL_STORAGE_KEY) === 'true') {
+            return;
+        }
+
+        setTimeout(() => {
+            modal.classList.remove('cross-sell-modal--hidden');
+            modal.classList.add('cross-sell-modal--visible');
+            document.addEventListener('keydown', handleEscKey);
+        }, CROSS_SELL_SHOW_DELAY);
+    };
+
+    // Return the show function for external use
+    return { showCrossSellModal };
+};
+
+// Initialize cross-sell modal
+const crossSellModal = initCrossSellModal();
